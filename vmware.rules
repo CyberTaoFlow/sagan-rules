@@ -1,5 +1,5 @@
 # Sagan vmware.rules
-# Copyright (c) 2009-2017, Quadrant Information Security <www.quadrantsec.com>
+# Copyright (c) 2009-2019. Quadrant Information Security <www.quadrantsec.com>
 # All rights reserved.
 #
 # Please submit any custom rules or ideas to sagan-submit@quadrantsec.com or the sagan-sigs mailing list
@@ -27,7 +27,7 @@
 # VMWare ESX
 
 #alert any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] User login successful"; pcre: "/Accepted password for|login from/i"; default_proto:tcp; classtype: successful-admin; program: vmware-hostd|vmware-authd; reference: url,wiki.quadrantsec.com/bin/view/Main/5000204; sid: 5000204; rev:2;)
-drop any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] User authentication failure - Brute force [5/5]"; content: "Rejected password for"; default_proto:tcp; classtype: unsuccessful-admin; program: vmware-hostd|vmware-authd; parse_src_ip: 1; after: track by_src, count 5, seconds 300; threshold: type limit, track by_src, count 5, seconds 300; fwsam: src, 1 day; xbits: set,brute_force,21600; reference: url,wiki.quadrantsec.com/bin/view/Main/5000206; sid: 5000206; rev:6;)
+drop any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] User authentication failure - Brute force [5/5]"; content: "Rejected password for"; default_proto:tcp; classtype: unsuccessful-admin; program: vmware-hostd|vmware-authd; parse_src_ip: 1; after: track by_src, count 5, seconds 300; threshold: suppress, track by_src, count 5, seconds 300; xbits: set,brute_force,track ip_src, expire 21600; reference: url,wiki.quadrantsec.com/bin/view/Main/5000206; sid: 5000206; rev:8;)
 #alert any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] User authentication failure"; content: "Rejected password for"; default_proto:tcp; classtype: unsuccessful-admin; program: vmware-hostd|vmware-authd; reference: url,wiki.quadrantsec.com/bin/view/Main/5001529; sid: 5001529; rev:2;)
 #alert any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] Virtual machine state change to OFF"; content: "VM_STATE_OFF"; default_proto:tcp; classtype: system-event; reference: url,wiki.quadrantsec.com/bin/view/Main/5000208; sid: 5000208; rev:2;)
 #alert any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] Virtual machine being turned ON"; content: "VM_STATE_POWERING_ON"; default_proto:tcp; classtype: system-event; reference: url,wiki.quadrantsec.com/bin/view/Main/5000380; sid: 5000380; rev:2;)
@@ -48,6 +48,6 @@ drop any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] User authentication f
 #2012-01-30T17:51:04.919Z [24C79B90 info 'Vimsvc'] [Auth]: User root
 #2012-01-30T17:51:04.920Z [24C79B90 info 'ha-eventmgr'] Event 37 : User root@192.168.1.1 logged in
 
-alert any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] Lost access to volume"; content: "Event 37 : "; default_proto:tcp; classtype: hardware-event; program: Hostd; reference: url,wiki.quadrantsec.com/bin/view/Main/5001098; sid: 5001099; rev:2;)
-alert any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] Possible HD/Datastore failure"; content: ": 1672: "; default_proto:tcp; classtype: hardware-event; program: vmkernel; reference: url,wiki.quadrantsec.com/bin/view/Main/5001100; sid: 5001100; rev:2;)
+#alert any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] Lost access to volume"; content: "Event 37 : "; default_proto:tcp; classtype: hardware-event; program: Hostd; reference: url,wiki.quadrantsec.com/bin/view/Main/5001098; sid: 5001099; rev:2;)
+#alert any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] Possible HD/Datastore failure"; content: ": 1672: "; default_proto:tcp; classtype: hardware-event; program: vmkernel; reference: url,wiki.quadrantsec.com/bin/view/Main/5001100; sid: 5001100; rev:2;)
 #alert any $EXTERNAL_NET any -> $HOME_NET any (msg:"[VMWARE] User login successful"; content: "Accepted password"; default_proto:tcp; classtype:  successful-admin; program: Hostd; normalize; reference: url,wiki.quadrantsec.com/bin/view/Main/5001101; sid: 5001101; rev:3;)
